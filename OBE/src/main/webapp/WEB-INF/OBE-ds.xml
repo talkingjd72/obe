@@ -24,7 +24,7 @@
     <!-- The datasource is bound into JNDI at this location. We reference 
         this in META-INF/persistence.xml -->
     <datasource jndi-name="java:jboss/datasources/OBEDS"
-        pool-name="OBE" enabled="true"
+        pool-name="OBE" enabled="false"
         use-java-context="true">
         <connection-url>jdbc:h2:mem:OBE;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1</connection-url>
         <driver>h2</driver>

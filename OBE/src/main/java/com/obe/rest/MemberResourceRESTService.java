@@ -66,6 +66,13 @@ public class MemberResourceRESTService {
     MemberRegistration registration;
 
     @GET
+    @Path("jerry")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getJerry() {
+    	return "Jerry";
+    }
+    
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Member> listAllMembers() {
         return repository.findAllOrderedByName();

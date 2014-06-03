@@ -16,6 +16,9 @@
  */
 package com.obe.rest;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -30,4 +33,14 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("/rest")
 public class JaxRsActivator extends Application {
     /* class body intentionally left blank */
+	public JaxRsActivator() {
+		singletons.add(new MemberResourceRESTService());
+	}
+	
+	@Override
+	public Set<Object> getSingletons() {
+		return singletons;
+	}
+	
+	Set<Object> singletons = new HashSet<Object>();
 }
