@@ -101,13 +101,18 @@
                         <password>sa</password>
                     </security>
                 </datasource>
+                <datasource jndi-name="java:jboss/datasources/MySqlOBEDS" pool-name="MySqlOBEDS" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:mysql://localhost:3306/obe</connection-url>
+                    <driver>mysql</driver>
+                    <security>
+                        <user-name>root</user-name>
+                    </security>
+                </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
                     <driver name="mysql" module="com.mysql">
-                        <!-- Need to declare driver class for mysql data source.  This is a
-                         bug with details located here: https://issues.jboss.org/browse/WFLY-3218 -->
                         <driver-class>com.mysql.jdbc.Driver</driver-class>
                         <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
                     </driver>
