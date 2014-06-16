@@ -19,8 +19,11 @@ package com.obe.rest;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+
+import com.obe.data.UserDAO;
 
 /**
  * A class extending {@link Application} and annotated with @ApplicationPath is the Java EE 6 "no XML" approach to activating
@@ -34,7 +37,15 @@ import javax.ws.rs.core.Application;
 public class JaxRsActivator extends Application {
     /* class body intentionally left blank */
 	public JaxRsActivator() {
-		singletons.add(new MemberResourceRESTService());
+//		singletons.add(new MemberResourceRESTService());
+//		singletons.add(new UserResourceRESTService());
+//		singletons.add(new UserDAO());
+	}
+	
+	// Acting as constructor
+	@Inject
+	private void initializeRestServices(UserResourceRESTService userRestServ) {
+		singletons.add(userRestServ);
 	}
 	
 	@Override

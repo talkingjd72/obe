@@ -25,38 +25,40 @@ import javax.persistence.criteria.Root;
 
 import java.util.List;
 
-import com.obe.model.Member;
+import com.obe.model.User;
 
 @ApplicationScoped
-public class MemberRepository {
+public class UserDAO {
 
 //	@PersistenceContext(unitName="primary")
     @Inject
     private EntityManager em;
 
-    public Member findById(Long id) {
-        return em.find(Member.class, id);
+    public User findById(Integer id) {
+        return em.find(User.class, id);
     }
 
-    public Member findByEmail(String email) {
+    public User findById(String userId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
-        Root<Member> member = criteria.from(Member.class);
+        CriteriaQuery<User> criteria = cb.createQuery(User.class);
+        Root<User> user = criteria.from(User.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(member).where(cb.equal(member.get(Member_.email), email));
-        criteria.select(member).where(cb.equal(member.get("email"), email));
+        // criteria.select(User).where(cb.equal(User.get(User_.email), email));
+        criteria.select(user).where(cb.equal(user.get("userId"), userId));
         return em.createQuery(criteria).getSingleResult();
     }
 
-    public List<Member> findAllOrderedByName() {
+    public List<User> findAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
-        Root<Member> member = criteria.from(Member.class);
+        CriteriaQuery<User> criteria = cb.createQuery(User.class);
+        Root<User> user = criteria.from(User.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(member).orderBy(cb.asc(member.get(Member_.name)));
-        criteria.select(member).orderBy(cb.asc(member.get("name")));
+        // criteria.select(User).orderBy(cb.asc(User.get(User_.name)));
+        criteria.select(user).orderBy(cb.asc(user.get("loginName")));
         return em.createQuery(criteria).getResultList();
     }
+    
+    
 }

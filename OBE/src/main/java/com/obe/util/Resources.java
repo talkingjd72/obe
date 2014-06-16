@@ -41,7 +41,7 @@ public class Resources {
     // use @SuppressWarnings to tell IDE to ignore warnings about field not being referenced directly
     @SuppressWarnings("unused")
     @Produces
-    @PersistenceContext
+    @PersistenceContext(unitName="primary")
     private EntityManager em;
 
     @Produces
@@ -54,5 +54,10 @@ public class Resources {
     public FacesContext produceFacesContext() {
         return FacesContext.getCurrentInstance();
     }
+    
+//    @Produces
+//    public EntityManager getEntityManager(InjectionPoint ip) {
+//    	return em;
+//    }
 
 }
