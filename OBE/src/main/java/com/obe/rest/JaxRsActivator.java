@@ -44,8 +44,10 @@ public class JaxRsActivator extends Application {
 	
 	// Acting as constructor
 	@Inject
-	private void initializeRestServices(UserResourceRESTService userRestServ) {
+	private void initializeRestServices(UserResourceRESTService userRestServ,
+			PatientResourceRESTService patientRestServ) {
 		singletons.add(userRestServ);
+		singletons.add(patientRestServ);
 	}
 	
 	@Override

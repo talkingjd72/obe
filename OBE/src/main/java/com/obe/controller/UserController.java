@@ -51,7 +51,7 @@ public class UserController {
 
     public void register() throws Exception {
         try {
-            userRegistration.register(newUser);
+//            userRegistration.register(newUser);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful");
             facesContext.addMessage(null, m);
             initNewUser();
