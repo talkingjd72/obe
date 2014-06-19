@@ -25,14 +25,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.obe.data.PatientDAO;
-import com.obe.model.Patient;
-//import com.obe.service.PatientRegistration;
-import com.obe.service.PatientRegistration;
+import com.obe.data.ProgramDAO;
+import com.obe.model.Program;
+import com.obe.service.ProgramRegistration;
 
-@Path("/patients")
+@Path("/programs")
 @RequestScoped
-public class PatientResourceRESTService {
+public class ProgramRestService {
 
     @Inject
     private Logger log;
@@ -41,63 +40,63 @@ public class PatientResourceRESTService {
     private Validator validator;
 
     @Inject
-    private PatientDAO repository;
+    private ProgramDAO repository;
 
     @Inject
-    PatientRegistration registration;
+    ProgramRegistration registration;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Patient> listAllPatients() {
+    public List<Program> listAllPrograms() {
         return repository.findAllOrderedByName();
     }
 
     @GET
-    @Path("/{idPatient:[0-9][0-9]*}")
+    @Path("/{idProgram:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Patient lookupPatientById(@PathParam("idPatient") int idPatient) {
-        Patient patient = repository.findById(idPatient);
-        if (patient == null) {
+    public Program lookupProgramById(@PathParam("idProgram") int idProgram) {
+        Program program = repository.findById(idProgram);
+        if (program == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return patient;
+        return program;
     }
     
-    @PUT
-    @Path("/{idPatient:[0-9][0-9]*}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Patient changePatientById(@PathParam("idPatient") int idPatient, Patient newPatient) {
-    	Patient databasePatient = repository.findById(newPatient.getIdPatient());
-    	
-    	if (databasePatient == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-    	
-    	newPatient.setFirstName(newPatient.getFirstName());
-    	newPatient.setLastName(newPatient.getLastName());
-    	
-//    	repository.updatePatient(newPatient);
-    	
-    	return newPatient;
-    }
+//    @PUT
+//    @Path("/{idProgram:[0-9][0-9]*}")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Program changeProgramById(@PathParam("idProgram") int idProgram, Program newProgram) {
+//    	Program databaseProgram = repository.findById(newProgram.getIdProgram());
+//    	
+//    	if (databaseProgram == null) {
+//            throw new WebApplicationException(Response.Status.NOT_FOUND);
+//        }
+//    	
+//    	newProgram.setFirstName(newProgram.getFirstName());
+//    	newProgram.setLastName(newProgram.getLastName());
+//    	
+////    	repository.updateProgram(newProgram);
+//    	
+//    	return newProgram;
+//    }
     
     /**
-     * Creates a new patient from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
+     * Creates a new Program from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createPatient(Patient patient) {
+    public Response createProgram(Program program) {
 
         Response.ResponseBuilder builder = null;
 
         try {
-            // Validates patient using bean validation
-//            validatePatient(patient);
+            // Validates program using bean validation
+//            validateprogram(program);
 
-            registration.register(patient);
+            registration.register(program);
 
             // Create an "ok" response
             builder = Response.ok();
@@ -121,28 +120,28 @@ public class PatientResourceRESTService {
 
     /**
      * <p>
-     * Validates the given patient variable and throws validation exceptions based on the type of error. If the error is standard
+     * Validates the given program variable and throws validation exceptions based on the type of error. If the error is standard
      * bean validation errors then it will throw a ConstraintValidationException with the set of the constraints violated.
      * </p>
      * <p>
-     * If the error is caused because an existing patient with the same email is registered it throws a regular validation
+     * If the error is caused because an existing program with the same email is registered it throws a regular validation
      * exception so that it can be interpreted separately.
      * </p>
      * 
-     * @param patient patient to be validated
+     * @param Program program to be validated
      * @throws ConstraintViolationException If Bean Validation errors exist
-     * @throws ValidationException If patient with the same email already exists
+     * @throws ValidationException If program with the same email already exists
      */
-    private void validatePatient(Patient patient) throws ConstraintViolationException, ValidationException {
+    private void validateProgram(Program program) throws ConstraintViolationException, ValidationException {
         // Create a bean validator and check for issues.
-        Set<ConstraintViolation<Patient>> violations = validator.validate(patient);
+        Set<ConstraintViolation<Program>> violations = validator.validate(program);
 
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
         // Check the uniqueness of the email address
-        if (emailAlreadyExists(patient.getIdPatient())) {
+        if (emailAlreadyExists(program.getIdProgram())) {
             throw new ValidationException("Unique Email Violation");
         }
     }
@@ -167,19 +166,19 @@ public class PatientResourceRESTService {
     }
 
     /**
-     * Checks if a patient with the same email address is already registered. This is the only way to easily capture the
-     * "@UniqueConstraint(columnNames = "email")" constraint from the Patient class.
+     * Checks if a program with the same email address is already registered. This is the only way to easily capture the
+     * "@UniqueConstraint(columnNames = "email")" constraint from the Program class.
      * 
      * @param email The email to check
      * @return True if the email already exists, and false otherwise
      */
     public boolean emailAlreadyExists(int email) {
-        Patient patient = null;
+        Program program = null;
         try {
-            patient = repository.findById(email);
+            program = repository.findById(email);
         } catch (NoResultException e) {
             // ignore
         }
-        return patient != null;
+        return program != null;
     }
 }

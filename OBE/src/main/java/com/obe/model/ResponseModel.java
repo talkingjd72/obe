@@ -12,7 +12,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Response", catalog = "obe")
-public class Response implements java.io.Serializable {
+public class ResponseModel implements java.io.Serializable {
+	// We named Response as ResponseModel instead because Response clashed with import javax.ws.rs.core.Response;
 
 	private int idResponse;
 	private String name;
@@ -20,14 +21,14 @@ public class Response implements java.io.Serializable {
 	private Integer idStimulus;
 	private Boolean successful;
 
-	public Response() {
+	public ResponseModel() {
 	}
 
-	public Response(int idResponse) {
+	public ResponseModel(int idResponse) {
 		this.idResponse = idResponse;
 	}
 
-	public Response(int idResponse, String name, Integer idTrial,
+	public ResponseModel(int idResponse, String name, Integer idTrial,
 			Integer idStimulus, Boolean successful) {
 		this.idResponse = idResponse;
 		this.name = name;

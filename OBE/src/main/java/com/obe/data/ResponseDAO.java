@@ -25,46 +25,46 @@ import javax.persistence.criteria.Root;
 
 import java.util.List;
 
-import com.obe.model.Patient;
+import com.obe.model.ResponseModel;
 
 @ApplicationScoped
-public class PatientDAO {
+public class ResponseDAO {
 
 //	@PersistenceContext(unitName="primary")
     @Inject
     private EntityManager em;
 
-    public Patient findById(Integer id) {
-        return em.find(Patient.class, id);
+    public ResponseModel findById(Integer id) {
+        return em.find(ResponseModel.class, id);
     }
 
-    public Patient findById(String patientId) {
+    public ResponseModel findById(String responseId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<ResponseModel> criteria = cb.createQuery(ResponseModel.class);
+        Root<ResponseModel> response = criteria.from(ResponseModel.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).where(cb.equal(Patient.get(Patient_.email), email));
-        criteria.select(patient).where(cb.equal(patient.get("patientId"), patientId));
+        // criteria.select(Response).where(cb.equal(Response.get(Response_.email), email));
+        criteria.select(response).where(cb.equal(response.get("responseId"), responseId));
         return em.createQuery(criteria).getSingleResult();
     }
 
-    public List<Patient> findAllOrderedByName() {
+    public List<ResponseModel> findAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<ResponseModel> criteria = cb.createQuery(ResponseModel.class);
+        Root<ResponseModel> response = criteria.from(ResponseModel.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).orderBy(cb.asc(Patient.get(Patient_.name)));
-        criteria.select(patient).orderBy(cb.asc(patient.get("lastName")), cb.asc(patient.get("firstName")));
+        // criteria.select(Response).orderBy(cb.asc(Response.get(Response_.name)));
+        criteria.select(response).orderBy(cb.asc(response.get("lastName")), cb.asc(response.get("firstName")));
         return em.createQuery(criteria).getResultList();
     }
     
-//    public void updatePatient(Patient newPatient) {
+//    public void updateResponse(Response newResponse) {
 ////    	CriteriaBuilder cb = em.getCriteriaBuilder();
-////    	CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
+////    	CriteriaQuery<Response> criteria = cb.createQuery(Response.class);
 ////    	criteria.
-//    	em.persist(newPatient);
+//    	em.persist(newResponse);
 //    	
 //    }
 }

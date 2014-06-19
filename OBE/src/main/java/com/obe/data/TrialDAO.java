@@ -25,46 +25,46 @@ import javax.persistence.criteria.Root;
 
 import java.util.List;
 
-import com.obe.model.Patient;
+import com.obe.model.Trial;
 
 @ApplicationScoped
-public class PatientDAO {
+public class TrialDAO {
 
 //	@PersistenceContext(unitName="primary")
     @Inject
     private EntityManager em;
 
-    public Patient findById(Integer id) {
-        return em.find(Patient.class, id);
+    public Trial findById(Integer id) {
+        return em.find(Trial.class, id);
     }
 
-    public Patient findById(String patientId) {
+    public Trial findById(String trialId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<Trial> criteria = cb.createQuery(Trial.class);
+        Root<Trial> trial = criteria.from(Trial.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).where(cb.equal(Patient.get(Patient_.email), email));
-        criteria.select(patient).where(cb.equal(patient.get("patientId"), patientId));
+        // criteria.select(Trial).where(cb.equal(Trial.get(Trial_.email), email));
+        criteria.select(trial).where(cb.equal(trial.get("trialId"), trialId));
         return em.createQuery(criteria).getSingleResult();
     }
 
-    public List<Patient> findAllOrderedByName() {
+    public List<Trial> findAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<Trial> criteria = cb.createQuery(Trial.class);
+        Root<Trial> trial = criteria.from(Trial.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).orderBy(cb.asc(Patient.get(Patient_.name)));
-        criteria.select(patient).orderBy(cb.asc(patient.get("lastName")), cb.asc(patient.get("firstName")));
+        // criteria.select(Trial).orderBy(cb.asc(Trial.get(Trial_.name)));
+        criteria.select(trial).orderBy(cb.asc(trial.get("lastName")), cb.asc(trial.get("firstName")));
         return em.createQuery(criteria).getResultList();
     }
     
-//    public void updatePatient(Patient newPatient) {
+//    public void updateTrial(Trial newTrial) {
 ////    	CriteriaBuilder cb = em.getCriteriaBuilder();
-////    	CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
+////    	CriteriaQuery<Trial> criteria = cb.createQuery(Trial.class);
 ////    	criteria.
-//    	em.persist(newPatient);
+//    	em.persist(newTrial);
 //    	
 //    }
 }

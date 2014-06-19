@@ -25,14 +25,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.obe.data.PatientDAO;
-import com.obe.model.Patient;
-//import com.obe.service.PatientRegistration;
-import com.obe.service.PatientRegistration;
+import com.obe.data.SeriesDAO;
+import com.obe.model.Series;
+import com.obe.service.SeriesRegistration;
 
-@Path("/patients")
+@Path("/Series")
 @RequestScoped
-public class PatientResourceRESTService {
+public class SeriesRestService {
 
     @Inject
     private Logger log;
@@ -41,63 +40,63 @@ public class PatientResourceRESTService {
     private Validator validator;
 
     @Inject
-    private PatientDAO repository;
+    private SeriesDAO repository;
 
     @Inject
-    PatientRegistration registration;
+    SeriesRegistration registration;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Patient> listAllPatients() {
+    public List<Series> listAllSeriess() {
         return repository.findAllOrderedByName();
     }
 
     @GET
-    @Path("/{idPatient:[0-9][0-9]*}")
+    @Path("/{idSeries:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Patient lookupPatientById(@PathParam("idPatient") int idPatient) {
-        Patient patient = repository.findById(idPatient);
-        if (patient == null) {
+    public Series lookupSeriesById(@PathParam("idSeries") int idSeries) {
+        Series series = repository.findById(idSeries);
+        if (series == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return patient;
+        return series;
     }
     
-    @PUT
-    @Path("/{idPatient:[0-9][0-9]*}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Patient changePatientById(@PathParam("idPatient") int idPatient, Patient newPatient) {
-    	Patient databasePatient = repository.findById(newPatient.getIdPatient());
-    	
-    	if (databasePatient == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-    	
-    	newPatient.setFirstName(newPatient.getFirstName());
-    	newPatient.setLastName(newPatient.getLastName());
-    	
-//    	repository.updatePatient(newPatient);
-    	
-    	return newPatient;
-    }
+//    @PUT
+//    @Path("/{idSeries:[0-9][0-9]*}")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Series changeSeriesById(@PathParam("idSeries") int idSeries, Series newSeries) {
+//    	Series databaseSeries = repository.findById(newSeries.getIdSeries());
+//    	
+//    	if (databaseSeries == null) {
+//            throw new WebApplicationException(Response.Status.NOT_FOUND);
+//        }
+//    	
+//    	newSeries.setFirstName(newSeries.getFirstName());
+//    	newSeries.setLastName(newSeries.getLastName());
+//    	
+////    	repository.updateSeries(newSeries);
+//    	
+//    	return newSeries;
+//    }
     
     /**
-     * Creates a new patient from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
+     * Creates a new Series from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createPatient(Patient patient) {
+    public Response createSeries(Series series) {
 
         Response.ResponseBuilder builder = null;
 
         try {
-            // Validates patient using bean validation
-//            validatePatient(patient);
+            // Validates series using bean validation
+//            validateSeries(series);
 
-            registration.register(patient);
+            registration.register(series);
 
             // Create an "ok" response
             builder = Response.ok();
@@ -121,28 +120,28 @@ public class PatientResourceRESTService {
 
     /**
      * <p>
-     * Validates the given patient variable and throws validation exceptions based on the type of error. If the error is standard
+     * Validates the given series variable and throws validation exceptions based on the type of error. If the error is standard
      * bean validation errors then it will throw a ConstraintValidationException with the set of the constraints violated.
      * </p>
      * <p>
-     * If the error is caused because an existing patient with the same email is registered it throws a regular validation
+     * If the error is caused because an existing series with the same email is registered it throws a regular validation
      * exception so that it can be interpreted separately.
      * </p>
      * 
-     * @param patient patient to be validated
+     * @param Series series to be validated
      * @throws ConstraintViolationException If Bean Validation errors exist
-     * @throws ValidationException If patient with the same email already exists
+     * @throws ValidationException If series with the same email already exists
      */
-    private void validatePatient(Patient patient) throws ConstraintViolationException, ValidationException {
+    private void validateSeries(Series series) throws ConstraintViolationException, ValidationException {
         // Create a bean validator and check for issues.
-        Set<ConstraintViolation<Patient>> violations = validator.validate(patient);
+        Set<ConstraintViolation<Series>> violations = validator.validate(series);
 
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
         // Check the uniqueness of the email address
-        if (emailAlreadyExists(patient.getIdPatient())) {
+        if (emailAlreadyExists(series.getIdSeries())) {
             throw new ValidationException("Unique Email Violation");
         }
     }
@@ -167,19 +166,19 @@ public class PatientResourceRESTService {
     }
 
     /**
-     * Checks if a patient with the same email address is already registered. This is the only way to easily capture the
-     * "@UniqueConstraint(columnNames = "email")" constraint from the Patient class.
+     * Checks if a series with the same email address is already registered. This is the only way to easily capture the
+     * "@UniqueConstraint(columnNames = "email")" constraint from the Series class.
      * 
      * @param email The email to check
      * @return True if the email already exists, and false otherwise
      */
     public boolean emailAlreadyExists(int email) {
-        Patient patient = null;
+        Series series = null;
         try {
-            patient = repository.findById(email);
+            series = repository.findById(email);
         } catch (NoResultException e) {
             // ignore
         }
-        return patient != null;
+        return series != null;
     }
 }

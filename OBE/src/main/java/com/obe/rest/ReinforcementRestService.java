@@ -25,14 +25,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.obe.data.PatientDAO;
-import com.obe.model.Patient;
-//import com.obe.service.PatientRegistration;
-import com.obe.service.PatientRegistration;
+import com.obe.data.ReinforcementDAO;
+import com.obe.model.Reinforcement;
+import com.obe.service.ReinforcementRegistration;
 
-@Path("/patients")
+@Path("/reinforcements")
 @RequestScoped
-public class PatientResourceRESTService {
+public class ReinforcementRestService {
 
     @Inject
     private Logger log;
@@ -41,63 +40,63 @@ public class PatientResourceRESTService {
     private Validator validator;
 
     @Inject
-    private PatientDAO repository;
+    private ReinforcementDAO repository;
 
     @Inject
-    PatientRegistration registration;
+    ReinforcementRegistration registration;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Patient> listAllPatients() {
+    public List<Reinforcement> listAllReinforcements() {
         return repository.findAllOrderedByName();
     }
 
     @GET
-    @Path("/{idPatient:[0-9][0-9]*}")
+    @Path("/{idReinforcement:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Patient lookupPatientById(@PathParam("idPatient") int idPatient) {
-        Patient patient = repository.findById(idPatient);
-        if (patient == null) {
+    public Reinforcement lookupReinforcementById(@PathParam("idReinforcement") int idReinforcement) {
+        Reinforcement reinforcement = repository.findById(idReinforcement);
+        if (reinforcement == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return patient;
+        return reinforcement;
     }
     
-    @PUT
-    @Path("/{idPatient:[0-9][0-9]*}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Patient changePatientById(@PathParam("idPatient") int idPatient, Patient newPatient) {
-    	Patient databasePatient = repository.findById(newPatient.getIdPatient());
-    	
-    	if (databasePatient == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-    	
-    	newPatient.setFirstName(newPatient.getFirstName());
-    	newPatient.setLastName(newPatient.getLastName());
-    	
-//    	repository.updatePatient(newPatient);
-    	
-    	return newPatient;
-    }
+//    @PUT
+//    @Path("/{idReinforcement:[0-9][0-9]*}")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Reinforcement changeReinforcementById(@PathParam("idReinforcement") int idReinforcement, Reinforcement newReinforcement) {
+//    	Reinforcement databaseReinforcement = repository.findById(newReinforcement.getIdReinforcement());
+//    	
+//    	if (databaseReinforcement == null) {
+//            throw new WebApplicationException(Response.Status.NOT_FOUND);
+//        }
+//    	
+//    	newReinforcement.setFirstName(newReinforcement.getFirstName());
+//    	newReinforcement.setLastName(newReinforcement.getLastName());
+//    	
+////    	repository.updateReinforcement(newReinforcement);
+//    	
+//    	return newReinforcement;
+//    }
     
     /**
-     * Creates a new patient from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
+     * Creates a new Reinforcement from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createPatient(Patient patient) {
+    public Response createReinforcement(Reinforcement reinforcement) {
 
         Response.ResponseBuilder builder = null;
 
         try {
-            // Validates patient using bean validation
-//            validatePatient(patient);
+            // Validates reinforcement using bean validation
+//            validatereinforcement(reinforcement);
 
-            registration.register(patient);
+            registration.register(reinforcement);
 
             // Create an "ok" response
             builder = Response.ok();
@@ -121,28 +120,28 @@ public class PatientResourceRESTService {
 
     /**
      * <p>
-     * Validates the given patient variable and throws validation exceptions based on the type of error. If the error is standard
+     * Validates the given reinforcement variable and throws validation exceptions based on the type of error. If the error is standard
      * bean validation errors then it will throw a ConstraintValidationException with the set of the constraints violated.
      * </p>
      * <p>
-     * If the error is caused because an existing patient with the same email is registered it throws a regular validation
+     * If the error is caused because an existing reinforcement with the same email is registered it throws a regular validation
      * exception so that it can be interpreted separately.
      * </p>
      * 
-     * @param patient patient to be validated
+     * @param Reinforcement reinforcement to be validated
      * @throws ConstraintViolationException If Bean Validation errors exist
-     * @throws ValidationException If patient with the same email already exists
+     * @throws ValidationException If reinforcement with the same email already exists
      */
-    private void validatePatient(Patient patient) throws ConstraintViolationException, ValidationException {
+    private void validateReinforcement(Reinforcement reinforcement) throws ConstraintViolationException, ValidationException {
         // Create a bean validator and check for issues.
-        Set<ConstraintViolation<Patient>> violations = validator.validate(patient);
+        Set<ConstraintViolation<Reinforcement>> violations = validator.validate(reinforcement);
 
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
         // Check the uniqueness of the email address
-        if (emailAlreadyExists(patient.getIdPatient())) {
+        if (emailAlreadyExists(reinforcement.getIdReinforcement())) {
             throw new ValidationException("Unique Email Violation");
         }
     }
@@ -167,19 +166,19 @@ public class PatientResourceRESTService {
     }
 
     /**
-     * Checks if a patient with the same email address is already registered. This is the only way to easily capture the
-     * "@UniqueConstraint(columnNames = "email")" constraint from the Patient class.
+     * Checks if a reinforcement with the same email address is already registered. This is the only way to easily capture the
+     * "@UniqueConstraint(columnNames = "email")" constraint from the reinforcement class.
      * 
      * @param email The email to check
      * @return True if the email already exists, and false otherwise
      */
     public boolean emailAlreadyExists(int email) {
-        Patient patient = null;
+        Reinforcement reinforcement = null;
         try {
-            patient = repository.findById(email);
+            reinforcement = repository.findById(email);
         } catch (NoResultException e) {
             // ignore
         }
-        return patient != null;
+        return reinforcement != null;
     }
 }

@@ -25,46 +25,46 @@ import javax.persistence.criteria.Root;
 
 import java.util.List;
 
-import com.obe.model.Patient;
+import com.obe.model.Therapist;
 
 @ApplicationScoped
-public class PatientDAO {
+public class TherapistDAO {
 
 //	@PersistenceContext(unitName="primary")
     @Inject
     private EntityManager em;
 
-    public Patient findById(Integer id) {
-        return em.find(Patient.class, id);
+    public Therapist findById(Integer id) {
+        return em.find(Therapist.class, id);
     }
 
-    public Patient findById(String patientId) {
+    public Therapist findById(String therapistId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<Therapist> criteria = cb.createQuery(Therapist.class);
+        Root<Therapist> therapist = criteria.from(Therapist.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).where(cb.equal(Patient.get(Patient_.email), email));
-        criteria.select(patient).where(cb.equal(patient.get("patientId"), patientId));
+        // criteria.select(Therapist).where(cb.equal(Therapist.get(Therapist_.email), email));
+        criteria.select(therapist).where(cb.equal(therapist.get("therapistId"), therapistId));
         return em.createQuery(criteria).getSingleResult();
     }
 
-    public List<Patient> findAllOrderedByName() {
+    public List<Therapist> findAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<Therapist> criteria = cb.createQuery(Therapist.class);
+        Root<Therapist> therapist = criteria.from(Therapist.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).orderBy(cb.asc(Patient.get(Patient_.name)));
-        criteria.select(patient).orderBy(cb.asc(patient.get("lastName")), cb.asc(patient.get("firstName")));
+        // criteria.select(Therapist).orderBy(cb.asc(Therapist.get(Therapist_.name)));
+        criteria.select(therapist).orderBy(cb.asc(therapist.get("lastName")), cb.asc(therapist.get("firstName")));
         return em.createQuery(criteria).getResultList();
     }
     
-//    public void updatePatient(Patient newPatient) {
+//    public void updateTherapist(Therapist newTherapist) {
 ////    	CriteriaBuilder cb = em.getCriteriaBuilder();
-////    	CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
+////    	CriteriaQuery<Therapist> criteria = cb.createQuery(Therapist.class);
 ////    	criteria.
-//    	em.persist(newPatient);
+//    	em.persist(newTherapist);
 //    	
 //    }
 }

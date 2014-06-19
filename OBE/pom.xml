@@ -176,6 +176,12 @@
             <artifactId>hibernate-validator-annotation-processor</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+		    <groupId>org.jboss.logging</groupId>
+		    <artifactId>jboss-logging</artifactId>
+		    <version>3.1.4.GA</version>
+		</dependency>
 
         <!-- Needed for running tests (you may also use TestNG) -->
         <dependency>

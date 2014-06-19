@@ -14,7 +14,6 @@ public class UserRegistration {
 	@Inject
     private Logger log;
 
-//    @PersistenceContext(unitName="primary")
     @Inject
     private EntityManager em;
 

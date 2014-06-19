@@ -25,46 +25,46 @@ import javax.persistence.criteria.Root;
 
 import java.util.List;
 
-import com.obe.model.Patient;
+import com.obe.model.TherapistPatients;
 
 @ApplicationScoped
-public class PatientDAO {
+public class TherapistPatientsDAO {
 
 //	@PersistenceContext(unitName="primary")
     @Inject
     private EntityManager em;
 
-    public Patient findById(Integer id) {
-        return em.find(Patient.class, id);
+    public TherapistPatients findById(Integer id) {
+        return em.find(TherapistPatients.class, id);
     }
 
-    public Patient findById(String patientId) {
+    public TherapistPatients findById(String therapistPatientsId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<TherapistPatients> criteria = cb.createQuery(TherapistPatients.class);
+        Root<TherapistPatients> therapistPatients = criteria.from(TherapistPatients.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).where(cb.equal(Patient.get(Patient_.email), email));
-        criteria.select(patient).where(cb.equal(patient.get("patientId"), patientId));
+        // criteria.select(TherapistPatients).where(cb.equal(TherapistPatients.get(TherapistPatients_.email), email));
+        criteria.select(therapistPatients).where(cb.equal(therapistPatients.get("therapistPatientsId"), therapistPatientsId));
         return em.createQuery(criteria).getSingleResult();
     }
 
-    public List<Patient> findAllOrderedByName() {
+    public List<TherapistPatients> findAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
-        Root<Patient> patient = criteria.from(Patient.class);
+        CriteriaQuery<TherapistPatients> criteria = cb.createQuery(TherapistPatients.class);
+        Root<TherapistPatients> therapistPatients = criteria.from(TherapistPatients.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new
         // feature in JPA 2.0
-        // criteria.select(Patient).orderBy(cb.asc(Patient.get(Patient_.name)));
-        criteria.select(patient).orderBy(cb.asc(patient.get("lastName")), cb.asc(patient.get("firstName")));
+        // criteria.select(TherapistPatients).orderBy(cb.asc(TherapistPatients.get(TherapistPatients_.name)));
+        criteria.select(therapistPatients).orderBy(cb.asc(therapistPatients.get("lastName")), cb.asc(therapistPatients.get("firstName")));
         return em.createQuery(criteria).getResultList();
     }
     
-//    public void updatePatient(Patient newPatient) {
+//    public void updateTherapistPatients(TherapistPatients newTherapistPatients) {
 ////    	CriteriaBuilder cb = em.getCriteriaBuilder();
-////    	CriteriaQuery<Patient> criteria = cb.createQuery(Patient.class);
+////    	CriteriaQuery<TherapistPatients> criteria = cb.createQuery(TherapistPatients.class);
 ////    	criteria.
-//    	em.persist(newPatient);
+//    	em.persist(newTherapistPatients);
 //    	
 //    }
 }
