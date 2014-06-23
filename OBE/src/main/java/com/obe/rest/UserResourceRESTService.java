@@ -36,6 +36,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -80,6 +81,19 @@ public class UserResourceRESTService {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return user;
+    }
+    
+    @GET
+    @Path("/{loginName}") // TODO add path for logig name and password parameters
+    @Produces(MediaType.APPLICATION_JSON)
+    public User lookupUserByLoginNameAndPassword(@PathParam("loginName") String loginName,
+    		@QueryParam("password") String password) {
+    	User user = repository.findByLoginNamePassword(loginName, password);
+    	if (user == null) {
+    		throw new WebApplicationException(Response.Status.NOT_FOUND);
+    	}
+    	
+    	return user;
     }
     
     /**

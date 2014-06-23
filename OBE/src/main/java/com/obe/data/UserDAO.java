@@ -60,5 +60,14 @@ public class UserDAO {
         return em.createQuery(criteria).getResultList();
     }
     
-    
+    public User findByLoginNamePassword(String loginName, String password) {
+    	CriteriaBuilder cb = em.getCriteriaBuilder();
+    	CriteriaQuery<User> criteria = cb.createQuery(User.class);
+    	Root<User> user = criteria.from(User.class);
+    	
+    	criteria.select(user).where(cb.equal(user.get("loginName"), loginName));
+    	criteria.select(user).where(cb.equal(user.get("password"), password));
+    	
+    	return em.createQuery(criteria).getSingleResult();
+    }
 }
