@@ -31,6 +31,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -88,6 +89,27 @@ public class UserResourceRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public User lookupUserByLoginNameAndPassword(@PathParam("loginName") String loginName,
     		@QueryParam("password") String password) {
+    	User user = repository.findByLoginNamePassword(loginName, password);
+    	if (user == null) {
+    		throw new WebApplicationException(Response.Status.NOT_FOUND);
+    	}
+    	
+    	return user;
+    }
+    
+    /**
+     * Created to login through login.html on a form submit.
+     * 
+     * @param loginName
+     * @param password
+     * @return
+     */
+    @GET
+    @Path("html/") // TODO add path for logig name and password parameters
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User lookupUserByLoginNameAndPasswordViaHtml(@FormParam("loginName") String loginName,
+    		@FormParam("password") String password) {
     	User user = repository.findByLoginNamePassword(loginName, password);
     	if (user == null) {
     		throw new WebApplicationException(Response.Status.NOT_FOUND);
