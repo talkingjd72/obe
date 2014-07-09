@@ -34,6 +34,8 @@
         <!--<welcome-file>index.jsp</welcome-file>-->
         <welcome-file>index.html</welcome-file>
         <welcome-file>obe.html</welcome-file>
+        <welcome-file>resources/ext-4.2.1.833/ext-debug.js</welcome-file>
+        <welcome-file>app.js</welcome-file>
     </welcome-file-list>
     
 </web-app>

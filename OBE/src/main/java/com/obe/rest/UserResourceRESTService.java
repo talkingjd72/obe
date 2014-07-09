@@ -108,8 +108,8 @@ public class UserResourceRESTService {
     @Path("html/") // TODO add path for logig name and password parameters
     @Consumes("application/x-www-form-urlencoded")
     @Produces(MediaType.APPLICATION_JSON)
-    public User lookupUserByLoginNameAndPasswordViaHtml(@FormParam("loginName") String loginName,
-    		@FormParam("password") String password) {
+    public User lookupUserByLoginNameAndPasswordViaHtml(@QueryParam("loginName") String loginName,
+    		@QueryParam("password") String password) {
     	User user = repository.findByLoginNamePassword(loginName, password);
     	if (user == null) {
     		throw new WebApplicationException(Response.Status.NOT_FOUND);

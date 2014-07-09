@@ -29,7 +29,7 @@ $('#signInButton').click(function () {
 	});
 });
 
-$('#loginForm').submit(function () {
+$('#loginForm').submit(function (data, event) {
 	var email = $('#loginEmail').val();
 	var loginPassword = $('#loginPassword').val();
 	
@@ -47,3 +47,11 @@ $('#loginForm').submit(function () {
 		}
 	});
 });
+
+function loginFormValidate() {
+	
+	var email = $('#loginEmail').val();
+	var loginPassword = $('#loginPassword').val();
+	
+	return true;
+}
